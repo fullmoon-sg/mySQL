@@ -1,0 +1,118 @@
+#SQL  commands
+
+## Login
+
+In the terminal, type
+
+......
+
+mmysql -u root
+create database <db name></db>;
+
+##List database
+show databases;
+
+# To Delete the table, 
+
+drop table <name></name>;
+
+# To display a table 
+
+describe <name>;
+
+## Switch to a database (make it active)
+
+use <db name>;
+create table parents
+(
+ parent_id int unsigned auto_increment primary key,  <----------unsigned means only positive number. auto_increment will auto index + 1 for new item. Primary key to indicate the primary 
+ surname varchar(50) not null,    <---------------key in engine.innodb when there is foreign key in your creation. Not null mean must have something.  
+ proper_name varchar(50) not null                                                  ----key of the tale.
+
+)engine=innodb;  
+
+
+# To edit or amend an item in the table
+alter table child add gender varchar(1) not null;
+
+# to remove a column
+alter table child drop gender;
+
+#To rename an item in a columna
+alter table child rename column surname to firstname;
+
+
+create table certificates(
+    certificate_id int unsigned auto_increment primary key,
+    name varchar(50) not null
+)engine=innodb;
+
+create table sessions(
+    session_id int unsigned auto_increment primary key,
+    created_at datetime not null,
+    venue varchar(45) not null
+)engine= innodb;
+
+// Make sure the parent_id int unsigned must be the same as parent table. This is to create the foreign key.
+create table child(
+child_id int unsigned auto_increment primary key,
+surname varchar(50) not null,
+proper_name varchar(50) not null,
+guardian int unsigned not null,
+foreign key(guardian) references parents(parent_id) 
+)engine=innodb;
+
+create table address(
+    address_id int unsigned auto_increment primary key,
+    street_name varchar(200) not null,
+    postal_code varchar(20) not null,
+    building_name varchar(200) not null,
+    country varchar(200) not null,
+    parent_id int unsigned not null,
+    foreign key(parent_id) references parents(parent_id)
+)engine=innodb;
+
+create table attendance(
+attendance_id int unsigned auto_increment primary key,
+session_id int unsigned not null,
+foreign key(session_id) references sessions(session_id),
+child_id int unsigned not null,
+foreign key(child_id) references child(child_id)
+)engine=innodb;
+
+create table certificates_child(
+certificates_child_id int unsigned auto_increment primary key,
+child_id int unsigned not null,
+foreign key(child_id) references child(child_id),
+certificate_id int unsigned not null,
+foreign key(certificate_id) references certificates(certificate_id)
+)engine=innodb;
+
+create table payments(
+payment_id int unsigned auto_increment primary key,
+payment_date datetime not null,
+amount decimal not null,
+payment_mode varchar(20) not null,
+parent_id int unsigned not null,
+foreign key(parent_id) references parents(parent_id),
+child_id int unsigned not null,
+foreign key(child_id) references child(child_id),
+session_id int unsigned not null,
+foreign key(session_id) references sessions(session_id)
+)engine=innodb;
+
+alter table child modify surname varchar(100) not null;
+
+create table coaches(
+
+    coach_id int unsigned auto_increment primary key,
+    name varchar(50) not null
+)engine=innodb;
+
+//add in new foreign key to existing table using 2 steps
+
+//1. create the new column
+alter table sessions add coach_id int unsigned not null;
+
+//2. create the foreign key
+alter table sessions add constraint fk_coach_id foreign key (coach_id) references coaches(coach_id);

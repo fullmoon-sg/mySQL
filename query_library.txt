@@ -1,0 +1,61 @@
+create table user(
+user_id int unsigned auto_increment primary key,
+name varchar(50) not null,
+email varchar(100) not null
+)engine=innodb;
+
+create table author(
+author_id int unsigned auto_increment primary key,
+first_name varchar(45) not null,
+last_name varchar(50) not null
+)engine=innodb;
+
+create table publisher(
+publisher_id int unsigned auto_increment primary key,
+name varchar(100) not null,
+website varchar(100) not null
+)engine=innodb;
+
+create table book(
+    book_id int unsigned auto_increment primary key,
+    title varchar(100) not null,
+    synospis text not null,
+    edition int not null
+)engine=innodb;
+
+create table copy(
+copy_id int unsigned auto_increment primary key,
+description varchar(20) not null,
+book_id int unsigned not null,
+foreign key(book_id) references book(book_id)
+)engine=innodb;
+
+create table author_book(
+    author_book int unsigned auto_increment primary key,
+    author_id int unsigned not null,
+    foreign key(author_id) references book(book_id)
+)engine=innodb;
+
+create table book_publisher(
+    book_publisher_id int unsigned auto_increment primary key,
+    publisher_id int unsigned not null,
+    foreign key(publisher_id) references publisher(publisher_id),
+    book_id int unsigned not null,
+    foreign key(book_id) references book(book_id)
+)engine=innodb;
+
+create table copy_user(
+    copy_user_id int unsigned auto_increment primary key,
+    date_borrowed date not null,
+    user_id int unsigned not null,
+    foreign key(user_id) references user(user_id),
+    copy_id int unsigned not null,
+    foreign key(copy_id) references copy(copy_id)
+)engine=innodb;
+
+insert into child(surname,lastname,guardian,gender,dob,allegeries) values ('Tan','Susan','1', 'm', '2019-06-29','no');
+insert into child(surname,lastname,guardian,gender,dob,allegeries) values ('Huawei','P40','2', 'f', '2020-10-29','no');
+
+To update 
+
+update child set lastname = 'Thomas' where child_id = 5;
